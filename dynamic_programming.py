@@ -1,4 +1,5 @@
 """"""
+from typing import Tuple
 import unittest
 import sys
 
@@ -53,6 +54,28 @@ def rod_cutting_bottom_up(prices: list, n: int) -> int:
     return r[n]
 
 
+def extended_rod_cutting(prices: list, n: int) -> Tuple[int, list]:
+    """返回最值和解"""
+    r, s = {}, {}
+
+    for i in range(n):
+        q = -sys.maxsize - 1
+        for j in range(i + 1):
+            c = prices[j] + r.get(i - j, 0)
+            if c > q:
+                q = c
+                s[i + 1] = j + 1
+
+        r[i + 1] = q
+
+    p, x = n, []
+    while p > 0:
+        x.append(s[p])
+        p -= s[p]
+
+    return r[n], x
+
+
 class DynamicProgrammingTest(unittest.TestCase):
     def test_rod_cutting_top_down(self):
         prices = [1, 5, 8, 9, 10, 17, 17, 20, 24, 30]
@@ -77,6 +100,13 @@ class DynamicProgrammingTest(unittest.TestCase):
         expected = [1, 5, 8, 10, 13, 17, 18, 22, 25, 30]
         actual = [rod_cutting_bottom_up(prices, i + 1) for i in range(n)]
         self.assertListEqual(expected, actual)
+
+    def test_extended_rod_cutting(self):
+        prices = [1, 5, 8, 9, 10, 17, 17, 20, 24, 30]
+        n = 10
+
+        for i in range(n):
+            print(extended_rod_cutting(prices, i + 1))
 
 
 def main():
