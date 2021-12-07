@@ -7,6 +7,7 @@ from dynamic_programming import extended_rod_cutting
 
 
 def mcm_top_down(shapes: list) -> int:
+    """自上而下，递归解法"""
     n = len(shapes) - 1
     return _mcm_top_down(shapes, 1, n)
 
@@ -28,6 +29,7 @@ def _mcm_top_down(shapes: list, head: int, tail: int) -> int:
 
 
 def mcm_bottom_up(shapes: list) -> int:
+    """自下而上，空间换时间"""
     n = len(shapes) - 1
     m = {}
     for d in range(1, n):
